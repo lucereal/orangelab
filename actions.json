@@ -1,0 +1,17 @@
+{
+  "1": {
+    "label": "Sleep",
+    "type": "script",
+    "id": "sleep"
+  },
+  "2": {
+    "label": "Wake",
+    "type": "script",
+    "id": "wake"
+  },
+  "3": {
+    "label": "Evening",
+    "type": "script",
+    "id": "evening"
+  }
+}

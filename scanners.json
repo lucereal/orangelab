@@ -1,0 +1,16 @@
+{
+  "1": {
+    "label": "Bedroom Dock",
+    "location": "bedroom",
+    "hardware": "ESP32 + PN532 + WS2812B",
+    "interface": "mqtt",
+    "active": true
+  },
+  "2": {
+    "label": "Desk Dock",
+    "location": "office",
+    "hardware": "ESP32 + PN532 + WS2812B",
+    "interface": "mqtt",
+    "active": true
+  }
+}

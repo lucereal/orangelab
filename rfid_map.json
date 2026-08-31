@@ -1,0 +1,55 @@
+{
+  "DEADBEEF": {
+    "owner": "example",
+    "name": "sleep token",
+    "scanner_id": null,
+    "actions": [
+      {
+        "action_id": 1,
+        "scanner_id": null,
+        "time_range": { "start": "00:00", "end": "23:59" }
+      }
+    ]
+  },
+  "CAFEBABE": {
+    "owner": "example",
+    "name": "wake token",
+    "scanner_id": null,
+    "actions": [
+      {
+        "action_id": 2,
+        "scanner_id": null,
+        "time_range": { "start": "00:00", "end": "23:59" }
+      }
+    ]
+  },
+  "04AABBCCDDEE01": {
+    "owner": "example",
+    "name": "evening token",
+    "scanner_id": null,
+    "actions": [
+      {
+        "action_id": 3,
+        "scanner_id": 1,
+        "time_range": { "start": "00:00", "end": "23:59" }
+      }
+    ]
+  },
+  "04AABBCCDDEE02": {
+    "owner": "example",
+    "name": "desk token",
+    "scanner_id": null,
+    "actions": [
+      {
+        "action_id": 2,
+        "scanner_id": 2,
+        "time_range": { "start": "00:00", "end": "20:59" }
+      },
+      {
+        "action_id": 1,
+        "scanner_id": 2,
+        "time_range": { "start": "21:00", "end": "23:59" }
+      }
+    ]
+  }
+}
