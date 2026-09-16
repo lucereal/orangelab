@@ -1,29 +1,42 @@
 # Open items
 
-From the repo review. Lab-grade kit; these are the rough edges.
+In-repo review work is done. What is left is on the broker and the docks — this repo cannot apply it.
 
-## Hardening
+## Remaining
 
-- [ ] Add tests (auth, registry resolve, time windows, handle_uid routing)
-- [ ] Auth on Flask `/rfid` (or bind it locally / drop the HTTP path)
-- [ ] MQTT topic access depends entirely on broker config — document expected ACLs
-- [ ] Replace firmware `indexOf("\"reason_code\":")` JSON parse with a real parser or a simpler payload
+- [ ] Broker: turn anonymous access off
+- [ ] Broker: create users `dock`, `listener`, `homeassistant` (or rename to match yours)
+- [ ] Broker: load `docs/mosquitto/acl` (HA Mosquitto add-on: Logins + ACL file)
+- [ ] Listener `.env`: `MQTT_USERNAME=listener` and that user's password
+- [ ] Dock `secrets.h`: dock user/password, then install ArduinoJson v7 and reflash
+- [ ] Confirm HA MQTT integration uses the `homeassistant` user (subscribe `token/dock/action` only)
 
-## Bugs
+See `docs/mqtt-acls.md`.
 
-- [ ] Remove leftover `from sre_parse import FAILURE` in `nfc/auth.py`
-- [ ] Serial path mismatch: RC522 sketch prints `UID: AABBCCDD`; `detect_rfid.py` passes the whole line into `handle_uid`
-- [ ] Time windows do not wrap midnight (`21:00`–`06:00` never matches because of `start <= now <= end`)
+## Done (in repo)
 
-## Firmware
+### Hardening
 
-- [ ] `flashFade` blocks the ESP32 loop (~2s), so MQTT/NFC polling pauses during the LED flash
+- [x] Add tests (auth, registry resolve, time windows, handle_uid routing)
+- [x] Drop HTTP `/rfid` and serial adapters
+- [x] Document expected MQTT ACLs (`docs/mqtt-acls.md`, `docs/mosquitto/`)
+- [x] Firmware result payload parsed with ArduinoJson v7
 
-## Cleanup
+### Bugs
 
-- [ ] REST leftovers still in the tree: `makeconnection.py`, `actions/sleep.py`, `actions/wake.py`, `presets/`
-- [ ] `HA_URL` in `ha/client.py` is hardcoded to `http://localhost:8123`
+- [x] Remove leftover `from sre_parse import FAILURE` in `nfc/auth.py`
+- [x] Serial UID prefix mismatch — serial path removed
+- [x] Time windows wrap midnight (`21:00`–`06:00`)
 
-## Integration
+### Firmware
 
-- [ ] HA script ids in `actions.json` are not validated against a live instance — wrong id publishes successfully, then HA misses
+- [x] Non-blocking LED fade so MQTT/NFC keep running
+
+### Cleanup
+
+- [x] Remove REST leftovers (`makeconnection.py`, `actions/sleep.py`, `actions/wake.py`, `presets/`, HA REST client)
+- [x] MQTT-only `handle_uid` and slim `requirements.txt`
+
+### Integration
+
+- [x] HA script ids: startup warning + README note; no live HA call

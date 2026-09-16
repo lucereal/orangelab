@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 from dotenv import load_dotenv
 from handle_rfid import handle_uid
 from ha import mqtt_publisher
+from nfc.registry import warn_incomplete_actions
 
 load_dotenv()
 
@@ -35,7 +36,7 @@ def on_message(client, userdata, msg):
     scanner_id = data.get("scanner_id", SCANNER_ID)
     mac = data.get("mac")
     print(f"MQTT scan received: uid={uid} scanner={scanner_id} mac={mac}")
-    result = handle_uid(uid, scanner_id=scanner_id, source="mqtt", mac=mac)
+    result = handle_uid(uid, scanner_id=scanner_id, mac=mac)
     mqtt_publisher.publish_result(scanner_id, result)
 
 
@@ -44,6 +45,8 @@ if MQTT_USERNAME:
     client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 client.on_connect = on_connect
 client.on_message = on_message
+
+warn_incomplete_actions()
 
 print(f"Connecting to MQTT broker at {MQTT_BROKER}:{MQTT_PORT}...")
 client.connect(MQTT_BROKER, MQTT_PORT)

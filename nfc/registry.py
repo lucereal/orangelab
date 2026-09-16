@@ -12,6 +12,29 @@ def _parse_time(s):
     return datetime.time(int(h), int(m))
 
 
+def _in_time_range(start, end, current):
+    if start <= end:
+        return start <= current <= end
+    return current >= start or current <= end
+
+
+def warn_incomplete_actions():
+    with open(_ACTIONS_PATH) as f:
+        actions = json.load(f)
+
+    problems = []
+    for key, action in actions.items():
+        if not isinstance(action, dict):
+            problems.append(f"actions.json {key!r} is not an object")
+            continue
+        if not action.get("id"):
+            problems.append(f"actions.json {key!r} is missing id — HA will not run a script")
+
+    for problem in problems:
+        print(f"Warning: {problem}")
+    return problems
+
+
 def resolve(uid, scanner_id, now=None):
     if now is None:
         now = datetime.datetime.now()
@@ -36,7 +59,7 @@ def resolve(uid, scanner_id, now=None):
         time_range = candidate.get("time_range", {})
         start = _parse_time(time_range.get("start", "00:00"))
         end = _parse_time(time_range.get("end", "23:59"))
-        if not (start <= current_time <= end):
+        if not _in_time_range(start, end, current_time):
             continue
 
         action_id = str(candidate["action_id"])

@@ -1,0 +1,15 @@
+# Token dock Mosquitto ACL. Copy to the broker (e.g. /mosquitto/config/acl).
+# Create matching users with mosquitto_passwd. Rename users if yours differ.
+
+user dock
+topic write token/dock/scan
+topic read token/dock/result/+
+
+user listener
+topic read token/dock/scan
+topic write token/dock/action
+topic write token/dock/result/+
+topic write token/dock/unregistered
+
+user homeassistant
+topic read token/dock/action

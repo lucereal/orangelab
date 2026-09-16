@@ -1,11 +1,9 @@
 import nfc.auth
 import nfc.registry
 from ha import mqtt_publisher
-from ha.trigger_script import trigger_script
-from makeconnection import set_preset
 
 
-def handle_uid(uid, scanner_id=1, source="serial", mac=None):
+def handle_uid(uid, scanner_id=1, mac=None):
     ok, reason, failure_reason = nfc.auth.authorize(uid, scanner_id)
     if not ok:
         print(
@@ -22,15 +20,5 @@ def handle_uid(uid, scanner_id=1, source="serial", mac=None):
         print(f"No action matched: uid={uid} scanner={scanner_id}")
         return {"ok": False, "reason": "no_action", "reason_code": failure_reason}
 
-    if source == "mqtt":
-        mqtt_publisher.publish_action(uid, scanner_id, action, mac=mac)
-        return {"ok": True, "action": action.get("id"), "reason_code": 10}
-    elif action["type"] == "preset":
-        ok = set_preset(action["name"])
-        return {"ok": ok, "action": action.get("id"), "reason_code": 10}
-    elif action["type"] == "script":
-        ok = trigger_script(action["id"])
-        return {"ok": ok, "action": action.get("id"), "reason_code": 10}
-    else:
-        print(f"Unknown action type: {action['type']}")
-        return {"ok": False, "reason": "unknown_action_type", "reason_code": 40}
+    mqtt_publisher.publish_action(uid, scanner_id, action, mac=mac)
+    return {"ok": True, "action": action.get("id"), "reason_code": 10}
