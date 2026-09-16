@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    restart: unless-stopped
+    environment:
+      TZ: America/Chicago
+    volumes:
+      - /home/dave/homeassistant:/config
+      - /run/dbus:/run/dbus:rw
+    network_mode: host
+    security_opt:
+      - apparmor=unconfined
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/rfkill:/dev/rfkill
