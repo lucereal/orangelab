@@ -13,6 +13,19 @@ In-repo review work is done. What is left is on the broker, the docks, and match
 - [x] `actions.json` ids match live HA scripts (`sleep_dave`, `wake_dave`, `evening_dave`)
 - [ ] HA automation `action event` still passes `uid` / `scanner_id` as `[object Object]`. Use `trigger.payload_json.uid` and `trigger.payload_json.scanner_id`, or drop those fields if the scripts do not use them. See `docs/home-assistant-config.md`.
 
+## Packaging (other HA users)
+
+See `docs/packaging.md`. Lab automation item above stays open.
+
+Decided: ESPHome + HA only for others. v1 is one dock + one action per token. Arduino, Python, multi-dock, and time windows stay in notes for later.
+
+- [x] Decide default path: ESPHome + HA only
+- [x] Decide v1 scope: one dock + one action per token
+- [ ] Phase 1: ESPHome dock firmware
+- [ ] Phase 1: HA blueprint (UID → one script)
+- [ ] Phase 1: install docs that assume Mosquitto add-on (no listener)
+- [ ] Phase 2: HACS integration (add a token, pick a script)
+
 See `docs/mqtt-acls.md`.
 
 ## Done (in repo)

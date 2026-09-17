@@ -26,3 +26,5 @@ ESP32 dock ──MQTT token/dock/scan──► mqtt_listener.py ──► handle
 Copy `.env.example` to `.env`. Used keys: `MQTT_BROKER`, `MQTT_PORT`, `MQTT_USERNAME`, `MQTT_PASSWORD`, `SCANNER_ID`.
 
 Broker ACLs: `docs/mqtt-acls.md` and `docs/mosquitto/`.
+
+Packaging: `docs/packaging.md`. HACS vs Docker vs add-on: `docs/hacs.md`.

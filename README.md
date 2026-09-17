@@ -182,5 +182,7 @@ Arduino IDE (ESP32 board package installed):
 | `.env.example` | Listener environment template |
 | `docs/mqtt-acls.md` | Why broker ACLs matter |
 | `docs/mosquitto/` | Copy-paste Mosquitto conf + ACL |
+| `docs/packaging.md` | How we package this for other HA users |
+| `docs/hacs.md` | HACS vs Docker vs add-on |
 
 Internal notes may still say `trialOrange`. The public name for this kit is **token dock**.
