@@ -65,9 +65,8 @@ The live automation that bridges MQTT → HA scripts:
 ```
 
 Builds the HA service call dynamically from the MQTT payload's
-`action.type` + `action.id` (e.g. `script.sleep_dave`). This is why the
-`actions.json` ids must exactly match real HA script entity ids — see the
-mismatch noted in `docs/open_items/tasks.md`.
+`action.type` + `action.id` (e.g. `script.sleep_dave`). `actions.json` ids
+must stay in sync with those entity suffixes.
 
 ## HA scripts (`scripts.yaml`, relevant subset)
 
@@ -109,7 +108,6 @@ evening_dave:
         device_id: 68e2f565ee4cf546ff5db11b014d7dd2
 ```
 
-`actions.json` currently maps to ids `sleep` / `wake` / `evening`, but the
-real script entities are `script.sleep_dave` / `script.wake_dave` /
-`script.evening_dave` — this is the mismatch tracked in
-`docs/open_items/tasks.md`.
+`actions.json` ids are `sleep_dave` / `wake_dave` / `evening_dave` so the
+automation resolves to `script.sleep_dave` (etc.). The live action still
+passes `uid` / `scanner_id` as `[object Object]` — fix that in HA, not here.

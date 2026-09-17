@@ -2,16 +2,16 @@
   "1": {
     "label": "Sleep",
     "type": "script",
-    "id": "sleep"
+    "id": "sleep_dave"
   },
   "2": {
     "label": "Wake",
     "type": "script",
-    "id": "wake"
+    "id": "wake_dave"
   },
   "3": {
     "label": "Evening",
     "type": "script",
-    "id": "evening"
+    "id": "evening_dave"
   }
 }

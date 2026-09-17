@@ -89,7 +89,7 @@ Replace these with your own UIDs, docks, and script ids.
 
 **`scanners.json`** — every dock the listener will accept. A scan from an unknown or `active: false` dock is rejected.
 
-**`actions.json`** — script ids you create in Home Assistant. This repo’s examples are generic (`sleep`, `wake`, `evening`). Do not copy someone else’s household scripts.
+**`actions.json`** — script ids you create in Home Assistant. This checkout maps to `sleep_dave` / `wake_dave` / `evening_dave` to match the live HA scripts. Use **your** script ids on another install.
 
 **`rfid_map.json`** — UID → action rules. `scanner_id: null` on an action means “any dock.” A numeric `scanner_id` means that action only fires on that dock.
 

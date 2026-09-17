@@ -10,7 +10,8 @@ In-repo review work is done. What is left is on the broker, the docks, and match
 - [ ] Listener `.env`: `MQTT_USERNAME=listener` and that user's password
 - [ ] Dock `secrets.h`: dock user/password, then install ArduinoJson v7 and reflash
 - [ ] Confirm HA MQTT integration uses the `homeassistant` user (subscribe `token/dock/action` only)
-- [ ] `actions.json` ids (`sleep`, `wake`, `evening`) don't match the live HA script entity ids (`script.sleep_dave`, `script.wake_dave`, `script.evening_dave`). The `token/dock/action` automation builds `{{ action.type }}.{{ action.id }}` → calls `script.sleep`, which doesn't exist. Either rename the HA scripts or update `actions.json` ids to match. See `docs/home-assistant-config.md`.
+- [x] `actions.json` ids match live HA scripts (`sleep_dave`, `wake_dave`, `evening_dave`)
+- [ ] HA automation `action event` still passes `uid` / `scanner_id` as `[object Object]`. Use `trigger.payload_json.uid` and `trigger.payload_json.scanner_id`, or drop those fields if the scripts do not use them. See `docs/home-assistant-config.md`.
 
 See `docs/mqtt-acls.md`.
 
