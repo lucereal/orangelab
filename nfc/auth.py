@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from sre_parse import FAILURE
 
 _BASE = Path(__file__).parent.parent
 _SCANNERS_PATH = _BASE / "scanners.json"

@@ -3,6 +3,7 @@
 #include <PN532.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <ArduinoJson.h>
 #include <FastLED.h>
 #include "secrets.h"
 
@@ -26,17 +27,17 @@ bool pendingEffect = false;
 CRGB pendingColor = CRGB::Black;
 
 void onMQTTMessage(char* topic, byte* payload, unsigned int length) {
-  String message = "";
-  for (unsigned int i = 0; i < length; i++) {
-    message += (char)payload[i];
+  JsonDocument doc;
+  DeserializationError err = deserializeJson(doc, payload, length);
+  if (err) {
+    Serial.print("Result JSON parse failed: ");
+    Serial.println(err.c_str());
+    return;
   }
-  Serial.println("Result: " + message);
 
-  int reasonCode = 0;
-  int idx = message.indexOf("\"reason_code\":");
-  if (idx >= 0) {
-    reasonCode = message.substring(idx + 14).toInt();
-  }
+  int reasonCode = doc["reason_code"] | 0;
+  Serial.print("Result reason_code=");
+  Serial.println(reasonCode);
 
   if (reasonCode == 10) {
     pendingColor = CRGB::Green;
@@ -104,10 +105,11 @@ void loop() {
     connectMQTT();
   }
   mqtt.loop();
+  updateFlashFade();
 
   if (pendingEffect) {
     pendingEffect = false;
-    flashFade(pendingColor, 250);
+    startFlashFade(pendingColor, 250);
   }
 
 

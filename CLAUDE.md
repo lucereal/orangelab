@@ -5,35 +5,24 @@ Internal name: trialOrange. Public name: token dock. See README.md for the kit w
 ## Architecture
 
 ```
-Input adapters              Core logic             Output adapters
-───────────────────         ──────────────         ──────────────────────
-detect_rfid.py  (serial) ─┐                   ┌──→ ha/trigger_script.py  (REST)
-rfid_server.py  (http)   ─┼─→ handle_rfid.py ─┤    makeconnection.py     (REST)
-mqtt_listener.py (mqtt)  ─┘   source param     └──→ ha/mqtt_publisher.py  (MQTT)
-                              routes output
+ESP32 dock ──MQTT token/dock/scan──► mqtt_listener.py ──► handle_rfid.py
+                                                      │
+                    ┌─────────────────────────────────┼─────────────────────┐
+                    ▼                                 ▼                     ▼
+           token/dock/action                 token/dock/result/<id>   token/dock/unregistered
+                    │                                 │
+                    ▼                                 ▼
+              Home Assistant                       dock LED
 ```
-
-## Input adapters
-
-- **`detect_rfid.py`** — reads Arduino RC522 over USB serial (`/dev/ttyACM0`)
-- **`rfid_server.py`** — Flask HTTP server, accepts POST `/rfid` with `{"uid": "...", "scanner_id": 1}`
-- **`mqtt_listener.py`** — subscribes to `token/dock/scan`, payload `{"uid": "...", "scanner_id": 2}`
-
-## Output routing
-
-| Source  | Output                              |
-|---------|-------------------------------------|
-| serial  | HA REST API (trigger_script / set_preset) |
-| http    | HA REST API (trigger_script / set_preset) |
-| mqtt    | MQTT `token/dock/action`            |
 
 ## Data files
 
 - `rfid_map.json` — UID → action mappings with time-based rules
 - `scanners.json` — active scanner definitions
-- `actions.json` — action definitions (scripts and presets)
-- `presets/` — light preset configs
+- `actions.json` — action definitions (HA script ids)
 
 ## Environment
 
-Copy `.env.example` to `.env`. Used keys: `HOME_LAB_TOKEN`, `MQTT_BROKER`, `MQTT_PORT`, `MQTT_USERNAME`, `MQTT_PASSWORD`, `SCANNER_ID`.
+Copy `.env.example` to `.env`. Used keys: `MQTT_BROKER`, `MQTT_PORT`, `MQTT_USERNAME`, `MQTT_PASSWORD`, `SCANNER_ID`.
+
+Broker ACLs: `docs/mqtt-acls.md` and `docs/mosquitto/`.

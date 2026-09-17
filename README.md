@@ -33,12 +33,6 @@ The MQTT dock sketch (`arduino/scanner_mqtt`) is built around:
 
 Typical I2C wiring on ESP32: SDA → GPIO 21, SCL → GPIO 22. Confirm I2C jumpers on the PN532 module.
 
-Earlier sketches still in this repo (optional, not the main path):
-
-- `arduino/rfid_rc522` — USB-serial UID dump (pair with `detect_rfid.py`)
-- `arduino/rfid_pn532` — HTTP POST to `rfid_server.py`
-- `arduino/led_ws2812b` — LED strip test
-
 ## MQTT topics
 
 | Topic | Direction | Purpose |
@@ -112,9 +106,9 @@ Read a token’s UID from the ESP32 serial monitor, then put **your** hex UID in
 
 ## Home Assistant
 
-1. Run an MQTT broker (Mosquitto add-on is fine) and enable the MQTT integration.
+1. Run an MQTT broker with passwords and topic ACLs (see `docs/mqtt-acls.md`). Enable the MQTT integration. Do not leave the broker anonymous — a client that can publish `token/dock/scan` or `token/dock/action` can trigger your automations.
 2. Create **your own** scripts (Settings → Automations & Scenes → Scripts). Name them whatever you want (`script.goodnight`, `script.office_on`, …).
-3. Put those script ids (the part after `script.`) into `actions.json`.
+3. Put those script ids (the part after `script.`) into `actions.json`. A typo still publishes `token/dock/action`; Home Assistant will miss. The listener does not call HA to check — it only warns at startup if an entry has no `id`.
 4. Add an automation that listens on `token/dock/action` and calls the script in the payload:
 
 ```yaml
@@ -127,8 +121,6 @@ action:
     target:
       entity_id: "script.{{ trigger.payload_json.action.id }}"
 ```
-
-Serial and HTTP adapters (`detect_rfid.py`, `rfid_server.py`) call the Home Assistant REST API instead of publishing `token/dock/action`. The MQTT path above is the one this kit is built around.
 
 ## Python listener
 
@@ -144,12 +136,12 @@ Edit `.env`:
 ```
 MQTT_BROKER=YOUR_MQTT_BROKER_HOST
 MQTT_PORT=1883
-MQTT_USERNAME=your_mqtt_user
+MQTT_USERNAME=listener
 MQTT_PASSWORD=your_mqtt_password
 SCANNER_ID=1
 ```
 
-`HOME_LAB_TOKEN` is only needed if you use the REST adapters.
+Use the **listener** user from `docs/mosquitto/acl`, not the dock user.
 
 ```bash
 python mqtt_listener.py
@@ -169,9 +161,9 @@ mosquitto_pub -h YOUR_MQTT_BROKER_HOST -t token/dock/scan \
 
 Arduino IDE (ESP32 board package installed):
 
-1. Install libraries: **PN532** (Seeed / elechouse — you need `PN532` and `PN532_I2C`), **PubSubClient**, **FastLED**.
+1. Install libraries: **PN532** (Seeed / elechouse — you need `PN532` and `PN532_I2C`), **PubSubClient**, **FastLED**, **ArduinoJson** (v7).
 2. Open `arduino/scanner_mqtt/scanner_mqtt.ino`.
-3. Copy `arduino/scanner_mqtt/secrets.h.example` to `arduino/scanner_mqtt/secrets.h` (gitignored) and fill in Wi-Fi, MQTT, and `SCANNER_ID`.
+3. Copy `arduino/scanner_mqtt/secrets.h.example` to `arduino/scanner_mqtt/secrets.h` (gitignored). Use the **dock** user from `docs/mosquitto/acl`.
 4. Select your ESP32 board and port, then Upload.
 5. Serial monitor at 9600 baud: Wi-Fi connect, PN532 found, then `Card: …` on a tap.
 
@@ -188,5 +180,7 @@ Arduino IDE (ESP32 board package installed):
 | `nfc/` | `scanners.json` + `rfid_map.json` lookup |
 | `rfid_map.json` / `scanners.json` / `actions.json` | Your mappings (examples only) |
 | `.env.example` | Listener environment template |
+| `docs/mqtt-acls.md` | Why broker ACLs matter |
+| `docs/mosquitto/` | Copy-paste Mosquitto conf + ACL |
 
 Internal notes may still say `trialOrange`. The public name for this kit is **token dock**.
