@@ -1,13 +1,19 @@
 # Home Assistant Docker Setup
 
-`docker-compose.yml` in this folder is a copy of the live compose file at
-`/home/dave/homeassistant/davelab/docker-compose.yml` on the host running
-Home Assistant. Keep both in sync if either is edited.
+Reference compose for a single Home Assistant container. On the HA host, set
+`HA_CONFIG_DIR` to that machine's config directory (do not commit the live path).
+
+```bash
+# docker/.env (gitignored) or export before compose
+HA_CONFIG_DIR=/path/to/homeassistant/config
+```
+
+Keep this file and the host compose in sync if either is edited.
 
 ## What it runs
 
 - `ghcr.io/home-assistant/home-assistant:stable`, `restart: unless-stopped`
-- `network_mode: host`, config volume at `/home/dave/homeassistant:/config`
+- `network_mode: host`, config volume from `HA_CONFIG_DIR`
 - USB/RFKill device passthrough (`/dev/bus/usb`, `/dev/rfkill`) — needed for
   the RFID/Zigbee-type hardware
 - `apparmor=unconfined` + `NET_ADMIN` / `SYS_ADMIN` / `NET_RAW` caps
