@@ -71,3 +71,6 @@ for `uid` / `scanner_id`. Stays open on `docs/open_items/tasks.md`.
 | **3 — kit** | Preflashed dock, if we ever ship hardware. |
 
 Phase 1 is the first packageable thing. Phase 2 is Tuesday-night usable.
+
+Install: `docs/install-esphome.md`. Firmware: `esphome/token-dock.yaml`.
+Blueprint: `homeassistant/blueprints/automation/token_dock_run_script.yaml`.

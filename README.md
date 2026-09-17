@@ -4,6 +4,10 @@ A lab kit: a physical NFC token sits on a dock. The dock reads the tag over I2C,
 
 This is a working proof of concept, not a product.
 
+**Other Home Assistant users:** ESPHome + a blueprint, no Python listener.
+See `docs/install-esphome.md` and `docs/packaging.md`. The Arduino +
+`mqtt_listener.py` path below is the lab / power-user install.
+
 ```
 NFC token
     │
@@ -173,7 +177,10 @@ Arduino IDE (ESP32 board package installed):
 
 | Path | Role |
 |------|------|
-| `arduino/scanner_mqtt/` | ESP32 dock firmware |
+| `esphome/token-dock.yaml` | Default dock firmware (ESPHome) |
+| `homeassistant/blueprints/` | HA blueprint: UID → one script |
+| `docs/install-esphome.md` | Install for other HA users |
+| `arduino/scanner_mqtt/` | Lab dock firmware (Arduino) |
 | `mqtt_listener.py` | MQTT input adapter |
 | `handle_rfid.py` | Auth + action resolve + output routing |
 | `ha/mqtt_publisher.py` | Publishes action / result / unregistered |

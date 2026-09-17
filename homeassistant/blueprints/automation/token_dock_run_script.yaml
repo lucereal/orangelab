@@ -1,0 +1,42 @@
+blueprint:
+  name: Token dock — run a script
+  description: >
+    When the dock publishes this token UID on token/dock/scan, run one script.
+    Create one automation from this blueprint per token. UID may be typed with
+    or without hyphens (DEADBEEF and DE-AD-BE-EF both match).
+  domain: automation
+  source_url: https://github.com/lucereal/orangelab
+  input:
+    token_uid:
+      name: Token UID
+      description: Hex UID from the ESPHome log or MQTT payload (uid field).
+      selector:
+        text:
+    script_entity:
+      name: Script to run
+      description: Your Home Assistant script. Do not use someone else's household ids.
+      selector:
+        entity:
+          domain: script
+          multiple: false
+
+mode: single
+
+variables:
+  token_uid: !input token_uid
+
+triggers:
+  - trigger: mqtt
+    topic: token/dock/scan
+
+conditions:
+  - condition: template
+    value_template: >-
+      {% set raw = trigger.payload_json.uid | default('', true) | string | upper | replace('-', '') %}
+      {% set want = token_uid | string | upper | replace('-', '') %}
+      {{ raw != '' and raw == want }}
+
+actions:
+  - action: script.turn_on
+    target:
+      entity_id: !input script_entity

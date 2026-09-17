@@ -208,5 +208,6 @@ __marimo__/
 
 # Token dock secrets (copy from *.example)
 secrets.h
+secrets.yaml
 .env
 *.db

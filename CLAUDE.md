@@ -27,4 +27,5 @@ Copy `.env.example` to `.env`. Used keys: `MQTT_BROKER`, `MQTT_PORT`, `MQTT_USER
 
 Broker ACLs: `docs/mqtt-acls.md` and `docs/mosquitto/`.
 
-Packaging: `docs/packaging.md`. HACS vs Docker vs add-on: `docs/hacs.md`.
+Packaging: `docs/packaging.md`. HA-native install: `docs/install-esphome.md`.
+HACS vs Docker vs add-on: `docs/hacs.md`.

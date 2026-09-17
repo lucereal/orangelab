@@ -21,9 +21,9 @@ Decided: ESPHome + HA only for others. v1 is one dock + one action per token. Ar
 
 - [x] Decide default path: ESPHome + HA only
 - [x] Decide v1 scope: one dock + one action per token
-- [ ] Phase 1: ESPHome dock firmware
-- [ ] Phase 1: HA blueprint (UID → one script)
-- [ ] Phase 1: install docs that assume Mosquitto add-on (no listener)
+- [x] Phase 1: ESPHome dock firmware (`esphome/token-dock.yaml`)
+- [x] Phase 1: HA blueprint (UID → one script)
+- [x] Phase 1: install docs that assume Mosquitto add-on (no listener)
 - [ ] Phase 2: HACS integration (add a token, pick a script)
 
 See `docs/mqtt-acls.md`.
