@@ -14,6 +14,7 @@ From the repo review. Lab-grade kit; these are the rough edges.
 - [ ] Remove leftover `from sre_parse import FAILURE` in `nfc/auth.py`
 - [ ] Serial path mismatch: RC522 sketch prints `UID: AABBCCDD`; `detect_rfid.py` passes the whole line into `handle_uid`
 - [ ] Time windows do not wrap midnight (`21:00`–`06:00` never matches because of `start <= now <= end`)
+- [ ] `actions.json` ids (`sleep`, `wake`, `evening`) don't match the live HA script entity ids (`script.sleep_dave`, `script.wake_dave`, `script.evening_dave`). The `token/dock/action` automation builds `{{ action.type }}.{{ action.id }}` → calls `script.sleep`, which doesn't exist. Either rename the HA scripts or update `actions.json` ids to match. See `docs/home-assistant-config.md`.
 
 ## Firmware
 
